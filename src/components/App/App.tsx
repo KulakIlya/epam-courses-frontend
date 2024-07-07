@@ -1,4 +1,4 @@
-import { FC, lazy } from 'react';
+import { FC, lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 const RegistrationPage = lazy(() => import('../../pages/RegistrationPage'));
@@ -9,16 +9,18 @@ const CreateCoursePage = lazy(() => import('../../pages/CreateCoursePage'));
 
 const App: FC = () => {
   return (
-    <Routes>
-      <Route path="/registration" element={<RegistrationPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/courses">
-        <Route index element={<CoursesPage />} />
-        <Route path=":id" element={<CourseDetailsPage />} />
-        <Route path="add" element={<CreateCoursePage />} />
-        <Route path="update/:id" element={<CreateCoursePage />} />
-      </Route>
-    </Routes>
+    <Suspense fallback={<p>Loading...</p>}>
+      <Routes>
+        <Route path="/registration" element={<RegistrationPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/courses">
+          <Route index element={<CoursesPage />} />
+          <Route path=":id" element={<CourseDetailsPage />} />
+          <Route path="add" element={<CreateCoursePage />} />
+          <Route path="update/:id" element={<CreateCoursePage />} />
+        </Route>
+      </Routes>
+    </Suspense>
   );
 };
 export default App;
