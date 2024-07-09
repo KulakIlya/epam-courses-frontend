@@ -1,5 +1,6 @@
 import { FC, lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import SharedLayout from '../SharedLayout';
 
 const RegistrationPage = lazy(() => import('../../pages/RegistrationPage'));
 const LoginPage = lazy(() => import('../../pages/LoginPage'));
@@ -9,18 +10,20 @@ const CreateCoursePage = lazy(() => import('../../pages/CreateCoursePage'));
 
 const App: FC = () => {
   return (
-    <Suspense fallback={<p>Loading...</p>}>
-      <Routes>
-        <Route path="/registration" element={<RegistrationPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/courses">
-          <Route index element={<CoursesPage />} />
-          <Route path=":id" element={<CourseDetailsPage />} />
-          <Route path="add" element={<CreateCoursePage />} />
-          <Route path="update/:id" element={<CreateCoursePage />} />
-        </Route>
-      </Routes>
-    </Suspense>
+    <SharedLayout>
+      <Suspense fallback={<p>Loading...</p>}>
+        <Routes>
+          <Route path="/registration" element={<RegistrationPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/courses">
+            <Route index element={<CoursesPage />} />
+            <Route path=":id" element={<CourseDetailsPage />} />
+            <Route path="add" element={<CreateCoursePage />} />
+            <Route path="update/:id" element={<CreateCoursePage />} />
+          </Route>
+        </Routes>
+      </Suspense>
+    </SharedLayout>
   );
 };
 export default App;

@@ -1,0 +1,15 @@
+.label {
+  position: relative;
+}
+
+.title {
+  display: block;
+  text-transform: capitalize;
+}
+
+.error {
+  white-space: nowrap;
+  position: absolute;
+  bottom: 0;
+  color: #ff0000;
+}

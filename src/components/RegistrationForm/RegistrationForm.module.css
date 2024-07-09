@@ -1,0 +1,36 @@
+@media screen and (min-width: 768px) {
+  .wrapper {
+    margin: 0 auto;
+    max-width: 585px;
+    padding: 77px 0 61px;
+    border: 1px solid #cfcfcf;
+    border-radius: 5px;
+  }
+}
+.form {
+  margin: 0 auto;
+  max-width: 286px;
+}
+
+.form label {
+  display: block;
+  padding-bottom: 20px;
+  margin-bottom: 10px;
+}
+
+.form button {
+  width: 100%;
+}
+
+.text {
+  font-weight: 400;
+
+  text-align: center;
+  margin-top: 20px;
+}
+
+.text a {
+  color: inherit;
+
+  font-weight: 700;
+}

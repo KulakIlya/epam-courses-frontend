@@ -1,8 +1,10 @@
+import 'modern-normalize';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import App from './components/App/App.tsx';
+
+import App from './components/App';
 import './index.css';
 
 import { PersistGate } from 'redux-persist/integration/react';
