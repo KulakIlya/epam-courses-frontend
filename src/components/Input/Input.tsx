@@ -7,13 +7,15 @@ import styles from './Input.module.css';
 interface InputProps extends InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
   type: HTMLInputTypeAttribute | 'textarea';
   name: string;
-  hasError: boolean;
+  hasError?: boolean;
 }
 
 const Input: FC<InputProps> = ({ name, type, defaultValue, hasError }) => {
-  const { register } = useFormContext();
+  const { register } = useFormContext() ?? {};
 
   const className = clsx(styles.input, hasError && styles.hasError);
+
+  if (name === 'search') return <input className={className} placeholder="Input text" />;
 
   if (type === 'textarea')
     return (
@@ -29,6 +31,7 @@ const Input: FC<InputProps> = ({ name, type, defaultValue, hasError }) => {
     return (
       <input
         className={className}
+        type={type}
         {...register(name)}
         placeholder="Input text"
         aria-invalid={hasError ? 'true' : 'false'}
@@ -38,6 +41,7 @@ const Input: FC<InputProps> = ({ name, type, defaultValue, hasError }) => {
   return (
     <input
       className={className}
+      type={type}
       {...register(name)}
       placeholder="Input text"
       aria-invalid={hasError ? 'true' : 'false'}

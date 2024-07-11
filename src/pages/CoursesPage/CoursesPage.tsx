@@ -1,8 +1,20 @@
 import { FC } from 'react';
 
-interface CoursesPageProps {}
+import Button from '../../components/Button';
+import CoursesList from '../../components/CoursesList';
+import SearchBar from '../../components/SearchBar';
 
-const CoursesPage: FC<CoursesPageProps> = () => {
-  return <div>CoursesPage</div>;
+import styles from './CoursesPage.module.css';
+
+const CoursesPage: FC = () => {
+  return (
+    <>
+      <div className={styles.wrapper}>
+        <SearchBar />
+        <Button redirectTo="add">Add course</Button>
+      </div>
+      <CoursesList />
+    </>
+  );
 };
 export default CoursesPage;

@@ -1,0 +1,14 @@
+.item {
+  font-weight: 400;
+  display: flex;
+  justify-content: space-between;
+}
+
+.item:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.button {
+  border: none;
+  background-color: transparent;
+}

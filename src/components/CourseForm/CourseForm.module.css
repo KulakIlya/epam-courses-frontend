@@ -1,0 +1,105 @@
+.formTitle {
+  margin-top: 30px;
+  margin-bottom: 24px;
+}
+
+.wrapper {
+  padding: 35px;
+  border-radius: 4px;
+  border: 1px solid #cfcfcf;
+
+  background-color: #ffffff;
+}
+
+@media screen and (min-width: 1156px) {
+  .wrapper {
+    padding: 42px 50px 77px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .wrapper {
+    padding: 42px 80px 77px;
+  }
+}
+
+.form textarea {
+  display: block;
+  width: 100%;
+  height: 152px;
+}
+
+.field {
+  display: flex;
+
+  gap: 16px;
+
+  margin-bottom: 30px;
+}
+
+.field label {
+  display: block;
+  padding-bottom: 20px;
+}
+
+.field.mainField {
+  display: block;
+}
+
+.field.mainField input {
+  width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+  .field input {
+    width: 400px;
+  }
+}
+
+.field > span {
+  margin-top: 30px;
+  font-weight: 400;
+}
+
+.field > button {
+  align-self: flex-start;
+  margin-top: 18px;
+}
+
+.authorField {
+  flex-direction: column;
+  padding-bottom: 0;
+}
+
+.authorField button {
+  margin-top: 0;
+}
+
+@media screen and (min-width: 768px) {
+  .authorField {
+    flex-direction: row;
+  }
+
+  .authorField button {
+    margin-top: 18px;
+  }
+}
+
+.buttonWrapper {
+  margin-top: 32px;
+
+  display: flex;
+  gap: 20px;
+  justify-content: flex-end;
+}
+
+.buttonWrapper button {
+  flex-basis: 185px;
+}
+
+@media screen and (min-width: 768px) {
+  .authorsWrapper {
+    display: flex;
+    gap: 150px;
+  }
+}

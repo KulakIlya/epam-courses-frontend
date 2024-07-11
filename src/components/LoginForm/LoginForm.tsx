@@ -8,6 +8,7 @@ import FormField from '../FormField';
 import { Inputs } from './LoginForm.types';
 
 import { NavLink } from 'react-router-dom';
+import { UserToLogin } from '../../redux/user/user.types';
 import Button from '../Button';
 import styles from './LoginForm.module.css';
 
@@ -27,10 +28,12 @@ const schema = yup
 const LoginForm: FC = () => {
   const methods = useForm<Inputs>({ resolver: yupResolver(schema) });
 
+  const onSubmit = (data: UserToLogin) => console.log(data);
+
   return (
     <FormProvider {...methods}>
       <div className={styles.wrapper}>
-        <form className={styles.form}>
+        <form onSubmit={methods.handleSubmit(onSubmit)} className={styles.form}>
           <FormField title="email" type="email" />
           <FormField title="password" type="password" />
           <Button type="submit">Login</Button>

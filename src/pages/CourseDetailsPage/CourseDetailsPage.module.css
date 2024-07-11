@@ -1,0 +1,100 @@
+.wrapper {
+  padding-top: 54px;
+}
+
+.title {
+  margin-bottom: 23px;
+}
+
+.courseInfo {
+  padding: 53px 33px;
+
+  border-radius: 4px;
+  border: 1px solid #cfcfcf;
+
+  background: #fff;
+}
+
+@media screen and (min-width: 768px) {
+  .courseInfo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 32px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .courseInfo {
+    padding: 53px 64px;
+  }
+}
+
+.cardTitle {
+  font-size: 20px;
+
+  line-height: 1;
+}
+
+.description {
+  margin-top: 25px;
+
+  color: #333e48;
+}
+
+.rightSide {
+  margin-top: 40px;
+}
+
+@media screen and (min-width: 768px) {
+  .rightSide {
+    padding: 15px 20px 0;
+    border-left: 1px solid #cfcfcf;
+  }
+}
+
+@media screen and (min-width: 1156px) {
+  .rightSide {
+    padding: 27px 0 0 20px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .rightSide {
+    padding: 27px 33px;
+  }
+}
+
+.rightSide > p {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+@media screen and (min-width: 1156px) {
+  .rightSide > p {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .rightSide > p {
+    grid-template-columns: 0.35fr 1fr;
+  }
+}
+
+.rightSide > p:not(:last-child) {
+  margin-bottom: 28px;
+}
+
+.cardValue {
+  display: inline-block;
+}
+
+.wrapper a {
+  margin-top: 46px;
+  margin-left: auto;
+
+  text-align: center;
+  display: block;
+  width: 185px;
+}
