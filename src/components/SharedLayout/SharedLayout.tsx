@@ -1,4 +1,6 @@
 import { FC, ReactNode } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import AppBar from '../AppBar';
 
@@ -15,6 +17,7 @@ const SharedLayout: FC<SharedLayoutProps> = ({ children }) => {
       <main className={styles.mainContent}>
         <div className="container">{children}</div>
       </main>
+      <ToastContainer position="top-right" />
     </>
   );
 };

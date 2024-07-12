@@ -5,6 +5,7 @@ export interface InitialState {
   email: string;
   token: string;
   isLoggedIn: boolean;
+  isLoading: boolean;
 }
 
 export interface AsyncThunkConfig {
@@ -17,6 +18,10 @@ export interface AsyncThunkConfig {
   fulfilledMeta?: unknown;
 
   rejectedMeta?: unknown;
+}
+
+export interface SuccessResponse<T extends object> {
+  data: T;
 }
 
 export interface ErrorResponse {
@@ -41,8 +46,6 @@ export interface UserToLogin {
 }
 
 export interface LoginSuccess {
-  name: string;
-  email: string;
   token: string;
 }
 

@@ -1,5 +1,8 @@
-import { FC, lazy, Suspense } from 'react';
+import { FC, lazy, Suspense, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import errorNotification from '../../helpers/errorNotification';
+import { useAppDispatch } from '../../redux/hooks';
+import { fetchUser } from '../../redux/user/operations';
 import SharedLayout from '../SharedLayout';
 
 const RegistrationPage = lazy(() => import('../../pages/RegistrationPage'));
@@ -9,6 +12,12 @@ const CourseDetailsPage = lazy(() => import('../../pages/CourseDetailsPage'));
 const CreateCoursePage = lazy(() => import('../../pages/CreateCoursePage'));
 
 const App: FC = () => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchUser()).unwrap().catch(errorNotification);
+  }, [dispatch]);
+
   return (
     <SharedLayout>
       <Suspense fallback={<p>Loading...</p>}>

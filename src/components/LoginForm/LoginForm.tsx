@@ -7,8 +7,12 @@ import { emailValidation } from '../../constants';
 import FormField from '../FormField';
 import { Inputs } from './LoginForm.types';
 
-import { NavLink } from 'react-router-dom';
-import { UserToLogin } from '../../redux/user/user.types';
+import { AxiosError } from 'axios';
+import { NavLink, useNavigate } from 'react-router-dom';
+import errorNotification from '../../helpers/errorNotification';
+import { useAppDispatch } from '../../redux/hooks';
+import { login } from '../../redux/user/operations';
+import { ErrorResponse, UserToLogin } from '../../redux/user/user.types';
 import Button from '../Button';
 import styles from './LoginForm.module.css';
 
@@ -26,9 +30,16 @@ const schema = yup
   .required();
 
 const LoginForm: FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const methods = useForm<Inputs>({ resolver: yupResolver(schema) });
 
-  const onSubmit = (data: UserToLogin) => console.log(data);
+  const onSubmit = (data: UserToLogin) =>
+    dispatch(login(data))
+      .unwrap()
+      .then(() => navigate('/courses'))
+      .catch(error => errorNotification(error as AxiosError<ErrorResponse>));
 
   return (
     <FormProvider {...methods}>

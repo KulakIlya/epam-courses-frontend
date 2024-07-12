@@ -1,15 +1,20 @@
 import { yupResolver } from '@hookform/resolvers/yup/src/yup.js';
+import { AxiosError } from 'axios';
 import { FC } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { NavLink, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { FormProvider, useForm } from 'react-hook-form';
 import { emailValidation } from '../../constants';
 import FormField from '../FormField';
-import { Inputs } from './RegistrationForm.types';
 
-import { NavLink } from 'react-router-dom';
+import { ErrorResponse } from '../../redux/user/user.types';
 import Button from '../Button';
 import styles from './RegistrationForm.module.css';
+
+import errorNotification from '../../helpers/errorNotification';
+import userService from '../../services/userService';
+import { Inputs } from './RegistrationForm.types';
 
 const schema = yup
   .object({
@@ -26,11 +31,23 @@ const schema = yup
   .required();
 
 const RegistrationForm: FC = () => {
+  const navigate = useNavigate();
+
   const methods = useForm<Inputs>({ resolver: yupResolver(schema) });
+
+  const onSubmit = async (data: Inputs) => {
+    try {
+      await userService.registerUser(data);
+      navigate('/login');
+    } catch (error) {
+      errorNotification(error as AxiosError<ErrorResponse>);
+    }
+  };
+
   return (
     <FormProvider {...methods}>
       <div className={styles.wrapper}>
-        <form className={styles.form}>
+        <form onSubmit={methods.handleSubmit(onSubmit)} className={styles.form}>
           <FormField type="text" title="name" />
           <FormField type="email" title="email" />
           <FormField type="password" title="password" />
