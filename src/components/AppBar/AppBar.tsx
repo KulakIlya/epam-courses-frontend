@@ -7,7 +7,7 @@ import Button from '../Button';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { logout } from '../../redux/user/operations';
-import { selectIsLoading, selectIsLoggedIn } from '../../redux/user/selectors';
+import { selectIsLoading, selectIsLoggedIn, selectUsername } from '../../redux/user/selectors';
 import styles from './AppBar.module.css';
 
 const AppBar: FC = () => {
@@ -15,6 +15,7 @@ const AppBar: FC = () => {
 
   const isLoading = useAppSelector(selectIsLoading);
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
+  const username = useAppSelector(selectUsername);
 
   const dispatch = useAppDispatch();
 
@@ -29,7 +30,7 @@ const AppBar: FC = () => {
         <div className={styles.wrapper}>
           {location.pathname !== '/login' && location.pathname !== '/registration' && (
             <>
-              <p>Harry Potter</p>
+              <p>{username}</p>
               <div>
                 {isLoggedIn ? (
                   <Button type="button" disabled={isLoading} onClick={handleLogout}>
