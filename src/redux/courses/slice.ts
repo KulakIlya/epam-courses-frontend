@@ -24,11 +24,11 @@ const coursesSlice = createSlice({
         state.list.push(payload);
       })
       .addCase(updateCourse.fulfilled, (state, { payload }) => {
-        const indexToUpdate = state.list.findIndex(item => item.id === payload.id);
+        const indexToUpdate = state.list.findIndex(item => item._id === payload._id);
         state.list[indexToUpdate] = payload;
       })
       .addCase(deleteCourse.fulfilled, (state, { payload }) => {
-        state.list = state.list.filter(item => item.id !== payload);
+        state.list = state.list.filter(item => item._id !== payload);
       }),
 });
 

@@ -1,21 +1,30 @@
 import { FC } from 'react';
 
 import Icon from '../../common/Icon';
+import { Author } from '../../redux/authors/authors.types';
+import { OnAddAuthor, OnRemoveAuthor } from '../AuthorsList/AuthorsList.types';
 import styles from './AuthorsItem.module.css';
 
 interface AuthorsItemProps {
-  author: {
-    name: string;
-    id: string;
-  };
+  author: Author | string;
   type: 'add' | 'remove';
+  onAddAuthor?: OnAddAuthor;
+  onRemoveAuthor?: OnRemoveAuthor;
 }
 
-const AuthorsItem: FC<AuthorsItemProps> = ({ author: { name }, type }) => {
+const AuthorsItem: FC<AuthorsItemProps> = ({ author, type, onAddAuthor, onRemoveAuthor }) => {
   return (
     <li className={styles.item}>
-      {name}
-      <button type="button" className={styles.button}>
+      {typeof author === 'object' ? author.name : author}
+      <button
+        type="button"
+        className={styles.button}
+        onClick={() =>
+          onAddAuthor
+            ? onAddAuthor(typeof author === 'object' ? author.name : author)
+            : onRemoveAuthor!(typeof author === 'object' ? author._id : author)
+        }
+      >
         {type === 'add' && <span>+</span>}
         {type === 'remove' && (
           <Icon iconName="bin-2" size={{ width: 12, height: 12 }} strokeColor="black" />

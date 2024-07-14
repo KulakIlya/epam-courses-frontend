@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import authorService from '../../services/authorsService';
+import authorsService from '../../services/authorsService';
 import { AsyncThunkConfig, ErrorResponse } from '../user/user.types';
 import { Author } from './authors.types';
 
@@ -10,7 +10,22 @@ export const fetchAllAuthors = createAsyncThunk<Author[], undefined, AsyncThunkC
     try {
       const {
         data: { data },
-      } = await authorService.fetchAllAuthors();
+      } = await authorsService.fetchAllAuthors();
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue((error as ErrorResponse).message);
+    }
+  }
+);
+
+export const addAuthors = createAsyncThunk<Author[], string[], AsyncThunkConfig>(
+  'authors/addMany',
+  async (names, thunkAPI) => {
+    try {
+      const {
+        data: { data },
+      } = await authorsService.addAuthors(names);
+
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue((error as ErrorResponse).message);
@@ -24,7 +39,7 @@ export const deleteAuthor = createAsyncThunk<Author, string, AsyncThunkConfig>(
     try {
       const {
         data: { data },
-      } = await authorService.deleteAuthor(id);
+      } = await authorsService.deleteAuthor(id);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue((error as ErrorResponse).message);

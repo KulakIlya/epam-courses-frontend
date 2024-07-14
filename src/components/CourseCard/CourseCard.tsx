@@ -1,11 +1,13 @@
 import { FC } from 'react';
 import { Course } from '../../redux/courses/courses.types';
 
-import { mockedAuthorsList } from '../../constants';
 import { convertTime } from '../../helpers/convertTime';
 import Button from '../Button';
 
 import Icon from '../../common/Icon';
+import formatCreatedAt from '../../helpers/formatCreatedAt';
+import { selectAuthorsList } from '../../redux/authors/selectors';
+import { useAppSelector } from '../../redux/hooks';
 import styles from './CourseCard.module.css';
 
 interface CourseCardProps {
@@ -13,8 +15,10 @@ interface CourseCardProps {
 }
 
 const CourseCard: FC<CourseCardProps> = ({
-  course: { title, description, authors, duration, creationDate, id },
+  course: { title, description, authors, duration, createdAt, _id },
 }) => {
+  const allAuthors = useAppSelector(selectAuthorsList);
+
   return (
     <li className={styles.card}>
       <h2 className={styles.title}>{title}</h2>
@@ -28,20 +32,18 @@ const CourseCard: FC<CourseCardProps> = ({
             <p>
               Authors:{' '}
               <span className="regular-text">
-                {authors
-                  .map(id => mockedAuthorsList.find(author => id === author.id)?.name)
-                  .join(', ')}
+                {authors.map(id => allAuthors.find(author => id === author._id)?.name).join(', ')}
               </span>
             </p>
             <p>
               Duration: <span className="regular-text">{convertTime(duration)} hours</span>
             </p>
             <p>
-              Created: <span className="regular-text">{creationDate}</span>
+              Created: <span className="regular-text">{formatCreatedAt(createdAt)}</span>
             </p>
           </div>
           <div className={styles.buttons}>
-            <Button redirectTo={`${id}`}>Show Course</Button>
+            <Button redirectTo={`${_id}`}>Show Course</Button>
 
             <>
               <Button>

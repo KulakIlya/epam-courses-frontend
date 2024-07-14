@@ -29,6 +29,7 @@ export const logout = createAsyncThunk<LogoutSuccess, undefined, AsyncThunkConfi
   async (_, thunkAPI) => {
     try {
       const { data } = await userService.logoutUser();
+
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue((error as ErrorResponse).message);

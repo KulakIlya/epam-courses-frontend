@@ -10,12 +10,21 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement | HTMLTextArea
   hasError?: boolean;
 }
 
-const Input: FC<InputProps> = ({ name, type, defaultValue, hasError }) => {
+const Input: FC<InputProps> = ({ name, type, defaultValue, hasError, value, onChange }) => {
   const { register } = useFormContext() ?? {};
 
   const className = clsx(styles.input, hasError && styles.hasError);
 
-  if (name === 'search') return <input className={className} placeholder="Input text" />;
+  if (name === 'search')
+    return (
+      <input
+        className={className}
+        placeholder="Input text"
+        name={name}
+        value={value}
+        onChange={onChange}
+      />
+    );
 
   if (type === 'textarea')
     return (
@@ -24,6 +33,8 @@ const Input: FC<InputProps> = ({ name, type, defaultValue, hasError }) => {
         {...register(name)}
         placeholder="Input text"
         aria-invalid={hasError ? 'true' : 'false'}
+        value={value}
+        onChange={onChange}
       ></textarea>
     );
 
@@ -35,6 +46,8 @@ const Input: FC<InputProps> = ({ name, type, defaultValue, hasError }) => {
         {...register(name)}
         placeholder="Input text"
         aria-invalid={hasError ? 'true' : 'false'}
+        value={value}
+        onChange={onChange}
       />
     );
 
@@ -45,6 +58,8 @@ const Input: FC<InputProps> = ({ name, type, defaultValue, hasError }) => {
       {...register(name)}
       placeholder="Input text"
       aria-invalid={hasError ? 'true' : 'false'}
+      value={value}
+      onChange={onChange}
     />
   );
 };

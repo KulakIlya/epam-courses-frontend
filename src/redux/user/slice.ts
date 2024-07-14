@@ -25,7 +25,6 @@ const userSlice = createSlice({
       .addCase(login.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.token = payload.token;
-        state.isLoggedIn = true;
       })
       .addCase(logout.fulfilled, state => {
         state.username = '';
@@ -45,6 +44,7 @@ const userSlice = createSlice({
       })
       .addCase(fetchUser.rejected, state => {
         state.isLoading = false;
+        state.token = '';
       }),
 });
 

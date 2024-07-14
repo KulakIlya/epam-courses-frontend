@@ -53,7 +53,7 @@ export const deleteCourse = createAsyncThunk<string, string, AsyncThunkConfig>(
       const {
         data: { data },
       } = await courseService.deleteCourse(id);
-      return (data as Course).id;
+      return (data as Course)._id;
     } catch (error) {
       return thunkAPI.rejectWithValue((error as ErrorResponse).message);
     }

@@ -1,11 +1,11 @@
 export interface Course {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   duration: number;
   owner: string;
   authors: string[];
-  creationDate: string;
+  createdAt: string;
 }
 
 export interface InitialState {
@@ -13,7 +13,7 @@ export interface InitialState {
 }
 
 // Add course
-export type CourseToAdd = Omit<Course, 'creationDate' | 'id'>;
+export type CourseToAdd = Omit<Course, 'createdAt' | 'owner' | '_id'>;
 
 // Update course
 export interface CourseToUpdate extends Partial<Omit<Course, 'id'>> {

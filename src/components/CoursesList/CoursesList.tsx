@@ -1,16 +1,25 @@
-import { FC } from 'react';
-import { mockedCoursesList } from '../../constants';
+import { FC, useMemo } from 'react';
 import CourseCard from '../CourseCard';
 
+import { Course } from '../../redux/courses/courses.types';
 import styles from './CoursesList.module.css';
 
-interface CoursesListProps {}
+interface CoursesListProps {
+  list: Course[];
+  filter: string;
+}
 
-const CoursesList: FC<CoursesListProps> = () => {
+const CoursesList: FC<CoursesListProps> = ({ list, filter }) => {
+  const filteredList = useMemo(() => {
+    return list.filter(
+      item => item._id.toLowerCase().includes(filter) || item.title.toLowerCase().includes(filter)
+    );
+  }, [filter, list]);
+
   return (
     <ul className={styles.list}>
-      {mockedCoursesList.map(item => (
-        <CourseCard course={item} key={item.id} />
+      {filteredList.map(item => (
+        <CourseCard course={item} key={item._id} />
       ))}
     </ul>
   );

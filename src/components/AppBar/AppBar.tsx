@@ -5,6 +5,8 @@ import Logo from '../../assets/images/logo.svg?react';
 
 import Button from '../Button';
 
+import { resetAuthors } from '../../redux/authors/slice';
+import { resetCourses } from '../../redux/courses/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { logout } from '../../redux/user/operations';
 import { selectIsLoading, selectIsLoggedIn, selectUsername } from '../../redux/user/selectors';
@@ -19,7 +21,11 @@ const AppBar: FC = () => {
 
   const dispatch = useAppDispatch();
 
-  const handleLogout = () => dispatch(logout());
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(resetCourses());
+    dispatch(resetAuthors());
+  };
 
   return (
     <header className={styles.header}>

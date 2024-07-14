@@ -1,8 +1,13 @@
+import { AxiosError } from 'axios';
 import { FC, lazy, Suspense, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import errorNotification from '../../helpers/errorNotification';
+
 import { useAppDispatch } from '../../redux/hooks';
 import { fetchUser } from '../../redux/user/operations';
+import { ErrorResponse } from '../../redux/user/user.types';
+
+import errorNotification from '../../helpers/errorNotification';
+
 import PrivateRoute from '../PrivateRoute';
 import RestrictedRoute from '../RestrictedRoute';
 import SharedLayout from '../SharedLayout';
@@ -17,9 +22,14 @@ const App: FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchUser())
-      .unwrap()
-      .catch(err => errorNotification(err));
+    const fetch = async () => {
+      try {
+        await dispatch(fetchUser());
+      } catch (error) {
+        errorNotification(error as AxiosError<ErrorResponse>);
+      }
+    };
+    fetch();
   }, [dispatch]);
 
   return (
