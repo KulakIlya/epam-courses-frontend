@@ -4,8 +4,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import AppBar from '../AppBar';
 
-import { useAppSelector } from '../../redux/hooks';
-import { selectIsLoading } from '../../redux/user/selectors';
 import styles from './SharedLayout.module.css';
 
 interface SharedLayoutProps {
@@ -13,8 +11,6 @@ interface SharedLayoutProps {
 }
 
 const SharedLayout: FC<SharedLayoutProps> = ({ children }) => {
-  const isLoading = useAppSelector(selectIsLoading);
-
   return (
     <>
       <AppBar />
