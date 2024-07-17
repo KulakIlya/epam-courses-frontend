@@ -1,6 +1,6 @@
 import { FC } from 'react';
+import { FiTrash2 } from 'react-icons/fi';
 
-import Icon from '../../common/Icon';
 import { Author } from '../../redux/authors/authors.types';
 import { OnAddAuthor, OnRemoveAuthor } from '../AuthorsList/AuthorsList.types';
 import styles from './AuthorsItem.module.css';
@@ -26,9 +26,7 @@ const AuthorsItem: FC<AuthorsItemProps> = ({ author, type, onAddAuthor, onRemove
         }
       >
         {type === 'add' && <span>+</span>}
-        {type === 'remove' && (
-          <Icon iconName="bin-2" size={{ width: 12, height: 12 }} strokeColor="black" />
-        )}
+        {type === 'remove' && <FiTrash2 size="12px" />}
       </button>
     </li>
   );

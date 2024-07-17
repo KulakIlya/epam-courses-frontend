@@ -1,10 +1,12 @@
 import { FC } from 'react';
+import { ImBin } from 'react-icons/im';
+import { MdOutlineEdit } from 'react-icons/md';
+
 import { Course } from '../../redux/courses/courses.types';
 
 import { convertTime } from '../../helpers/convertTime';
 import Button from '../Button';
 
-import Icon from '../../common/Icon';
 import errorNotification from '../../helpers/errorNotification';
 import formatCreatedAt from '../../helpers/formatCreatedAt';
 import { selectAuthorsList } from '../../redux/authors/selectors';
@@ -59,10 +61,10 @@ const CourseCard: FC<CourseCardProps> = ({
 
             <>
               <Button onClick={handleRemoveCourse}>
-                <Icon iconName="course-bin" size={{ width: 25, height: 25 }} fillColor="#ffffff" />
+                <ImBin size="25px" />
               </Button>
               <Button redirectTo={`edit/${_id}`}>
-                <Icon iconName="edit" size={{ width: 25, height: 25 }} fillColor="#ffffff" />
+                <MdOutlineEdit size="30px" />
               </Button>
             </>
           </div>
