@@ -19,6 +19,7 @@ import FormField from '../FormField';
 
 import styles from './CourseForm.module.css';
 
+import Loader from '../../common/Loader';
 import coursesService from '../../services/coursesService';
 import { Inputs } from './CourseForm.types';
 
@@ -97,8 +98,8 @@ const CourseForm: FC = () => {
 
   useEffect(() => {
     if (!id) return;
+    setIsLoading(true);
     const fetch = async () => {
-      setIsLoading(true);
       const {
         data: {
           data: { authors, duration, ...restData },
@@ -113,77 +114,91 @@ const CourseForm: FC = () => {
     fetch();
   }, [authorsList, id]);
 
-  if (isLoading) return <p>Loading...</p>;
-
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} noValidate className={styles.form}>
-        <div className={styles.wrapper}>
-          <h3 className={styles.formTitle}>Main info</h3>
-          <div className={`${styles.field} ${styles.mainField}`}>
-            <FormField
-              title="title"
-              name="title"
-              type="text"
-              value={restFormData.title}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className={`${styles.field} ${styles.mainField}`}>
-            <FormField
-              title="description"
-              name="description"
-              type="textarea"
-              value={restFormData.description}
-              onChange={handleInputChange}
-            />
-          </div>
-          <h3 className={styles.formTitle}>Duration</h3>
-          <div className={styles.field}>
-            <FormField
-              title="duration"
-              name="duration"
-              type="number"
-              onChange={handleDurationChange}
-              value={durationValue ? durationValue.toString() : ''}
-            />
-            <span>
-              <span className="bolded-text">{convertTime(Number(durationValue))}</span> hours
-            </span>
-          </div>
-
-          <h3 className={styles.formTitle}>Authors</h3>
-          <div className={`${styles.field} ${styles.authorField}`}>
-            <FormField
-              title="author name"
-              name="_"
-              type="text"
-              value={authorInputValue}
-              onChange={handleAuthorInputChange}
-            />
-            <Button type="button" onClick={handleCreateAuthorClick}>
-              Create author
-            </Button>
-          </div>
-          <div className={styles.authorsWrapper}>
-            <div>
-              <h4 className={`${styles.formTitle} ${styles.authorsTitle}`}>Authors List</h4>
-              <AuthorsList list={filteredAuthorsList} type="add" onAddAuthor={handleAddAuthor} />
-            </div>
-            <div>
-              <h3 className={`${styles.formTitle} ${styles.authorsTitle}`}>Course Authors</h3>
-              <AuthorsList list={authorsToAdd} type="remove" onRemoveAuthor={handleRemoveAuthor} />
-            </div>
-          </div>
-        </div>
-        <div className={styles.buttonWrapper}>
-          <Button redirectTo="/courses">Cancel</Button>
-          {!id ? (
-            <Button type="submit">Create course</Button>
+        <>
+          {isLoading ? (
+            <Loader />
           ) : (
-            <Button type="submit">Update course</Button>
+            <>
+              <div className={styles.wrapper}>
+                <h3 className={styles.formTitle}>Main info</h3>
+                <div className={`${styles.field} ${styles.mainField}`}>
+                  <FormField
+                    title="title"
+                    name="title"
+                    type="text"
+                    value={restFormData.title}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className={`${styles.field} ${styles.mainField}`}>
+                  <FormField
+                    title="description"
+                    name="description"
+                    type="textarea"
+                    value={restFormData.description}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <h3 className={styles.formTitle}>Duration</h3>
+                <div className={styles.field}>
+                  <FormField
+                    title="duration"
+                    name="duration"
+                    type="number"
+                    onChange={handleDurationChange}
+                    value={durationValue ? durationValue.toString() : ''}
+                  />
+                  <span>
+                    <span className="bolded-text">{convertTime(Number(durationValue))}</span> hours
+                  </span>
+                </div>
+
+                <h3 className={styles.formTitle}>Authors</h3>
+                <div className={`${styles.field} ${styles.authorField}`}>
+                  <FormField
+                    title="author name"
+                    name="_"
+                    type="text"
+                    value={authorInputValue}
+                    onChange={handleAuthorInputChange}
+                  />
+                  <Button type="button" onClick={handleCreateAuthorClick}>
+                    Create author
+                  </Button>
+                </div>
+                <div className={styles.authorsWrapper}>
+                  <div>
+                    <h4 className={`${styles.formTitle} ${styles.authorsTitle}`}>Authors List</h4>
+                    <AuthorsList
+                      list={filteredAuthorsList}
+                      type="add"
+                      onAddAuthor={handleAddAuthor}
+                    />
+                  </div>
+                  <div>
+                    <h3 className={`${styles.formTitle} ${styles.authorsTitle}`}>Course Authors</h3>
+                    <AuthorsList
+                      list={authorsToAdd}
+                      type="remove"
+                      onRemoveAuthor={handleRemoveAuthor}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className={styles.buttonWrapper}>
+                <Button redirectTo="/courses">Cancel</Button>
+                {!id ? (
+                  <Button type="submit">Create course</Button>
+                ) : (
+                  <Button type="submit">Update course</Button>
+                )}
+              </div>
+            </>
           )}
-        </div>
+        </>
       </form>
     </FormProvider>
   );

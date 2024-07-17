@@ -19,7 +19,7 @@ const SharedLayout: FC<SharedLayoutProps> = ({ children }) => {
     <>
       <AppBar />
       <main className={styles.mainContent}>
-        {isLoading ? <p>Loading...</p> : <div className="container">{children}</div>}
+        <div className="container">{children}</div>
       </main>
       <ToastContainer position="top-right" />
     </>

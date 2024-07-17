@@ -6,6 +6,7 @@ import { fetchUser } from '../../redux/user/operations';
 
 import errorNotification from '../../helpers/errorNotification';
 
+import Loader from '../../common/Loader';
 import PrivateRoute from '../PrivateRoute';
 import RestrictedRoute from '../RestrictedRoute';
 import SharedLayout from '../SharedLayout';
@@ -35,7 +36,7 @@ const App: FC = () => {
 
   return (
     <SharedLayout>
-      <Suspense fallback={<p>Loading...</p>}>
+      <Suspense fallback={<Loader />}>
         <Routes>
           <Route
             path="/registration"
