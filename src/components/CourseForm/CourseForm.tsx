@@ -43,10 +43,12 @@ const CourseForm: FC = () => {
   const [authorInputValue, setAuthorInputValue] = useState('');
   const [durationValue, setDurationValue] = useState<number | null>(null);
 
-  const [restFormData, setRestFormData] = useState<Omit<Inputs, 'duration'>>({
-    title: '',
-    description: '',
-  });
+  // const [restFormData, setRestFormData] = useState<Omit<Inputs, 'duration'>>({
+  //   title: '',
+  //   description: '',
+  // });
+
+  // console.log(restFormData);
 
   const filteredAuthorsList = authorsList.filter(item => !authorsToAdd.includes(item.name));
 
@@ -102,17 +104,21 @@ const CourseForm: FC = () => {
     const fetch = async () => {
       const {
         data: {
-          data: { authors, duration, ...restData },
+          data: { title, authors, description, duration },
         },
       } = await coursesService.fetchCourse(id);
-      setAuthorsToAdd(authors?.map(id => authorsList.find(author => id === author._id)?.name));
+
+      methods.setValue('title', title);
+      methods.setValue('description', description);
+      methods.setValue('duration', duration);
+
       setDurationValue(duration);
-      setRestFormData(restData);
+      setAuthorsToAdd(authors?.map(id => authorsList.find(author => id === author._id)?.name));
 
       setIsLoading(false);
     };
     fetch();
-  }, [authorsList, id]);
+  }, [authorsList, id, methods]);
 
   return (
     <FormProvider {...methods}>
@@ -125,20 +131,13 @@ const CourseForm: FC = () => {
               <div className={styles.wrapper}>
                 <h3 className={styles.formTitle}>Main info</h3>
                 <div className={`${styles.field} ${styles.mainField}`}>
-                  <FormField
-                    title="title"
-                    name="title"
-                    type="text"
-                    value={restFormData.title}
-                    onChange={handleInputChange}
-                  />
+                  <FormField title="title" name="title" type="text" onChange={handleInputChange} />
                 </div>
                 <div className={`${styles.field} ${styles.mainField}`}>
                   <FormField
                     title="description"
                     name="description"
                     type="textarea"
-                    value={restFormData.description}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -149,7 +148,6 @@ const CourseForm: FC = () => {
                     name="duration"
                     type="number"
                     onChange={handleDurationChange}
-                    value={durationValue ? durationValue.toString() : ''}
                   />
                   <span>
                     <span className="bolded-text">{convertTime(Number(durationValue))}</span> hours

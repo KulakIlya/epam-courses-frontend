@@ -15,12 +15,14 @@ import { selectIsLoggedIn } from '../../redux/user/selectors';
 
 import styles from './CoursesPage.module.css';
 
+import { selectAuthorsList } from '../../redux/authors/selectors';
 import { HandleFilter } from './CoursesPage.type';
 
 const CoursesPage: FC = () => {
   const [filter, setFilter] = useState<string>('');
 
   const coursesList = useAppSelector(selectCourseList);
+  const authors = useAppSelector(selectAuthorsList);
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
 
   const dispatch = useAppDispatch();
@@ -30,16 +32,16 @@ const CoursesPage: FC = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        if (!isLoggedIn) await dispatch(fetchUser());
-        await dispatch(fetchAllCourses());
+        if (!isLoggedIn) await dispatch(fetchUser()).unwrap();
+        if (!coursesList.length) await dispatch(fetchAllCourses()).unwrap();
 
-        await dispatch(fetchAllAuthors());
+        if (!authors) await dispatch(fetchAllAuthors()).unwrap();
       } catch (error) {
         errorNotification(error as string);
       }
     };
     fetch();
-  }, [dispatch, isLoggedIn]);
+  }, [dispatch, isLoggedIn, authors, coursesList]);
 
   return (
     <>

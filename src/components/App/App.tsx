@@ -25,7 +25,7 @@ const App: FC = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        await dispatch(fetchUser());
+        await dispatch(fetchUser()).unwrap();
       } catch (error) {
         errorNotification(error as string);
         navigate('/login');
