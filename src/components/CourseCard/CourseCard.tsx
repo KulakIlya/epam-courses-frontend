@@ -4,14 +4,12 @@ import { Course } from '../../redux/courses/courses.types';
 import { convertTime } from '../../helpers/convertTime';
 import Button from '../Button';
 
-import { AxiosError } from 'axios';
 import Icon from '../../common/Icon';
 import errorNotification from '../../helpers/errorNotification';
 import formatCreatedAt from '../../helpers/formatCreatedAt';
 import { selectAuthorsList } from '../../redux/authors/selectors';
 import { deleteCourse } from '../../redux/courses/operations';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { ErrorResponse } from '../../redux/user/user.types';
 import styles from './CourseCard.module.css';
 
 interface CourseCardProps {
@@ -29,7 +27,7 @@ const CourseCard: FC<CourseCardProps> = ({
     try {
       await dispatch(deleteCourse(_id));
     } catch (error) {
-      errorNotification(error as AxiosError<ErrorResponse>);
+      errorNotification(error as string);
     }
   };
 
