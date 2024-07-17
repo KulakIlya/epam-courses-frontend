@@ -35,7 +35,7 @@ const CoursesPage: FC = () => {
         if (!isLoggedIn) await dispatch(fetchUser()).unwrap();
         if (!coursesList.length) await dispatch(fetchAllCourses()).unwrap();
 
-        if (!authors) await dispatch(fetchAllAuthors()).unwrap();
+        if (!authors.length) await dispatch(fetchAllAuthors()).unwrap();
       } catch (error) {
         errorNotification(error as string);
       }

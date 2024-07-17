@@ -21,7 +21,9 @@ const authorsSlice = createSlice({
         state.list = payload;
       })
       .addCase(addAuthors.fulfilled, (state, { payload }) => {
-        state.list.push(...payload);
+        const newAuthors = payload.filter(({ _id }) => !state.list.find(item => item._id === _id));
+
+        state.list.push(...newAuthors);
       })
       .addCase(deleteAuthor.fulfilled, (state, { payload }) => {
         state.list = state.list.filter(item => item._id !== payload._id);

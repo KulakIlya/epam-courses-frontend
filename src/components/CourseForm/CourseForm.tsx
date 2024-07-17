@@ -43,22 +43,11 @@ const CourseForm: FC = () => {
   const [authorInputValue, setAuthorInputValue] = useState('');
   const [durationValue, setDurationValue] = useState<number | null>(null);
 
-  // const [restFormData, setRestFormData] = useState<Omit<Inputs, 'duration'>>({
-  //   title: '',
-  //   description: '',
-  // });
-
-  // console.log(restFormData);
-
   const filteredAuthorsList = authorsList.filter(item => !authorsToAdd.includes(item.name));
 
   const methods = useForm<Inputs>({
     resolver: yupResolver(schema),
   });
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setRestFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  };
 
   const handleAddAuthor: OnAddAuthor = (newAuthor: string) =>
     setAuthorsToAdd(prev => [...prev, newAuthor]);
@@ -100,7 +89,9 @@ const CourseForm: FC = () => {
 
   useEffect(() => {
     if (!id || !authorsList.length) return;
+
     setIsLoading(true);
+
     const fetch = async () => {
       const {
         data: {
@@ -122,7 +113,7 @@ const CourseForm: FC = () => {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} noValidate className={styles.form}>
+      <form onSubmit={methods.handleSubmit(onSubmit)} className={styles.form}>
         <>
           {isLoading ? (
             <Loader />
@@ -131,15 +122,10 @@ const CourseForm: FC = () => {
               <div className={styles.wrapper}>
                 <h3 className={styles.formTitle}>Main info</h3>
                 <div className={`${styles.field} ${styles.mainField}`}>
-                  <FormField title="title" name="title" type="text" onChange={handleInputChange} />
+                  <FormField title="title" name="title" type="text" />
                 </div>
                 <div className={`${styles.field} ${styles.mainField}`}>
-                  <FormField
-                    title="description"
-                    name="description"
-                    type="textarea"
-                    onChange={handleInputChange}
-                  />
+                  <FormField title="description" name="description" type="textarea" />
                 </div>
                 <h3 className={styles.formTitle}>Duration</h3>
                 <div className={styles.field}>

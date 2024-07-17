@@ -13,16 +13,15 @@ interface AuthorsListProps {
 const AuthorsList: FC<AuthorsListProps> = ({ list, type, onAddAuthor, onRemoveAuthor }) => {
   return (
     <ul>
-      {list.length &&
-        list.map(item => (
-          <AuthorsItem
-            author={item!}
-            type={type}
-            key={typeof item === 'object' ? item._id : item}
-            onAddAuthor={onAddAuthor}
-            onRemoveAuthor={onRemoveAuthor}
-          />
-        ))}
+      {list.map(item => (
+        <AuthorsItem
+          author={item!}
+          type={type}
+          key={typeof item === 'object' ? item._id : item}
+          onAddAuthor={onAddAuthor}
+          onRemoveAuthor={onRemoveAuthor}
+        />
+      ))}
     </ul>
   );
 };
