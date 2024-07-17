@@ -97,7 +97,7 @@ const CourseForm: FC = () => {
   };
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || !authorsList.length) return;
     setIsLoading(true);
     const fetch = async () => {
       const {
