@@ -4,8 +4,6 @@ import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../redux/hooks';
 import { fetchUser } from '../../redux/user/operations';
 
-import errorNotification from '../../helpers/errorNotification';
-
 import Loader from '../../common/Loader';
 import PrivateRoute from '../PrivateRoute';
 import RestrictedRoute from '../RestrictedRoute';
@@ -27,7 +25,6 @@ const App: FC = () => {
       try {
         await dispatch(fetchUser()).unwrap();
       } catch (error) {
-        errorNotification(error as string);
         navigate('/login');
       }
     };
