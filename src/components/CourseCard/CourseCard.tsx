@@ -4,10 +4,14 @@ import { Course } from '../../redux/courses/courses.types';
 import { convertTime } from '../../helpers/convertTime';
 import Button from '../Button';
 
+import { AxiosError } from 'axios';
 import Icon from '../../common/Icon';
+import errorNotification from '../../helpers/errorNotification';
 import formatCreatedAt from '../../helpers/formatCreatedAt';
 import { selectAuthorsList } from '../../redux/authors/selectors';
-import { useAppSelector } from '../../redux/hooks';
+import { deleteCourse } from '../../redux/courses/operations';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { ErrorResponse } from '../../redux/user/user.types';
 import styles from './CourseCard.module.css';
 
 interface CourseCardProps {
@@ -17,7 +21,17 @@ interface CourseCardProps {
 const CourseCard: FC<CourseCardProps> = ({
   course: { title, description, authors, duration, createdAt, _id },
 }) => {
+  const dispatch = useAppDispatch();
+
   const allAuthors = useAppSelector(selectAuthorsList);
+
+  const handleRemoveCourse = async () => {
+    try {
+      await dispatch(deleteCourse(_id));
+    } catch (error) {
+      errorNotification(error as AxiosError<ErrorResponse>);
+    }
+  };
 
   return (
     <li className={styles.card}>
@@ -46,10 +60,10 @@ const CourseCard: FC<CourseCardProps> = ({
             <Button redirectTo={`${_id}`}>Show Course</Button>
 
             <>
-              <Button>
+              <Button onClick={handleRemoveCourse}>
                 <Icon iconName="course-bin" size={{ width: 25, height: 25 }} fillColor="#ffffff" />
               </Button>
-              <Button>
+              <Button redirectTo={`edit/${_id}`}>
                 <Icon iconName="edit" size={{ width: 25, height: 25 }} fillColor="#ffffff" />
               </Button>
             </>

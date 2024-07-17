@@ -11,7 +11,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement | HTMLTextArea
 }
 
 const Input: FC<InputProps> = ({ name, type, defaultValue, hasError, value, onChange }) => {
-  const { register } = useFormContext() ?? {};
+  const { register } = useFormContext() || {};
 
   const className = clsx(styles.input, hasError && styles.hasError);
 
@@ -23,6 +23,7 @@ const Input: FC<InputProps> = ({ name, type, defaultValue, hasError, value, onCh
         name={name}
         value={value}
         onChange={onChange}
+        defaultValue={defaultValue}
       />
     );
 
@@ -35,6 +36,7 @@ const Input: FC<InputProps> = ({ name, type, defaultValue, hasError, value, onCh
         aria-invalid={hasError ? 'true' : 'false'}
         value={value}
         onChange={onChange}
+        defaultValue={defaultValue}
       ></textarea>
     );
 
@@ -47,6 +49,7 @@ const Input: FC<InputProps> = ({ name, type, defaultValue, hasError, value, onCh
         placeholder="Input text"
         aria-invalid={hasError ? 'true' : 'false'}
         value={value}
+        defaultValue={defaultValue}
         onChange={onChange}
       />
     );
@@ -60,6 +63,7 @@ const Input: FC<InputProps> = ({ name, type, defaultValue, hasError, value, onCh
       aria-invalid={hasError ? 'true' : 'false'}
       value={value}
       onChange={onChange}
+      defaultValue={defaultValue}
     />
   );
 };

@@ -9,9 +9,9 @@ const fetchCourse = (id: string) => coursesClient.get<SuccessResponse<Course>>(`
 const addCourse = (courseToAdd: CourseToAdd) =>
   coursesClient.post<SuccessResponse<Course>>('/add', courseToAdd);
 
-const updateCourse = ({ id, ...rest }: CourseToUpdate) =>
-  coursesClient.patch<SuccessResponse<Course>>(`/${id}`, rest);
+const updateCourse = ({ _id, ...rest }: CourseToUpdate) =>
+  coursesClient.patch<SuccessResponse<Course>>(`/${_id}`, rest);
 
-const deleteCourse = (id: string) => coursesClient.delete<SuccessResponse<Course>>(`/${id}`);
+const deleteCourse = (_id: string) => coursesClient.delete<SuccessResponse<Course>>(`/${_id}`);
 
 export default { fetchAll, fetchCourse, addCourse, updateCourse, deleteCourse };

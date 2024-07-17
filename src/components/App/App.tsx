@@ -1,10 +1,8 @@
-import { AxiosError } from 'axios';
 import { FC, lazy, Suspense, useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
 import { useAppDispatch } from '../../redux/hooks';
 import { fetchUser } from '../../redux/user/operations';
-import { ErrorResponse } from '../../redux/user/user.types';
 
 import errorNotification from '../../helpers/errorNotification';
 
@@ -19,6 +17,8 @@ const CourseDetailsPage = lazy(() => import('../../pages/CourseDetailsPage'));
 const CreateCoursePage = lazy(() => import('../../pages/CreateCoursePage'));
 
 const App: FC = () => {
+  const navigate = useNavigate();
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -26,11 +26,12 @@ const App: FC = () => {
       try {
         await dispatch(fetchUser());
       } catch (error) {
-        errorNotification(error as AxiosError<ErrorResponse>);
+        errorNotification(error as string);
+        navigate('/login');
       }
     };
     fetch();
-  }, [dispatch]);
+  }, [dispatch, navigate]);
 
   return (
     <SharedLayout>
@@ -55,10 +56,11 @@ const App: FC = () => {
               element={<PrivateRoute element={<CreateCoursePage />} redirectTo="/login" />}
             />
             <Route
-              path="update/:id"
+              path="edit/:id"
               element={<PrivateRoute element={<CreateCoursePage />} redirectTo="/login" />}
             />
           </Route>
+          <Route path="*" element={<Navigate to="/courses" />} />
         </Routes>
       </Suspense>
     </SharedLayout>

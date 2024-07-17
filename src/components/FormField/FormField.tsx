@@ -10,10 +10,11 @@ interface FormFieldProps {
   title: string;
   name?: string;
   value?: string;
+  defaultValue?: string;
   onChange?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 }
 
-const FormField: FC<FormFieldProps> = ({ type, title, name, value, onChange }) => {
+const FormField: FC<FormFieldProps> = ({ type, title, name, value, onChange, defaultValue }) => {
   const {
     formState: { errors },
   } = useFormContext();
@@ -28,6 +29,7 @@ const FormField: FC<FormFieldProps> = ({ type, title, name, value, onChange }) =
           hasError={!!errors[title]}
           value={value}
           onChange={onChange}
+          defaultValue={defaultValue}
         />
         {errors[title] && (
           <p className={styles.error} role="alert">
@@ -45,6 +47,7 @@ const FormField: FC<FormFieldProps> = ({ type, title, name, value, onChange }) =
         hasError={!!errors[title]}
         value={value}
         onChange={onChange}
+        defaultValue={defaultValue}
       />
       {errors[title] && (
         <p className={styles.error} role="alert">

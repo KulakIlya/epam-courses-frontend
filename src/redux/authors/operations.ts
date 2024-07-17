@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { AxiosError } from 'axios';
 import authorsService from '../../services/authorsService';
 import { AsyncThunkConfig, ErrorResponse } from '../user/user.types';
 import { Author } from './authors.types';
@@ -13,7 +14,7 @@ export const fetchAllAuthors = createAsyncThunk<Author[], undefined, AsyncThunkC
       } = await authorsService.fetchAllAuthors();
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue((error as ErrorResponse).message);
+      return thunkAPI.rejectWithValue((error as AxiosError<ErrorResponse>).response!.data.message);
     }
   }
 );
@@ -28,7 +29,7 @@ export const addAuthors = createAsyncThunk<Author[], string[], AsyncThunkConfig>
 
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue((error as ErrorResponse).message);
+      return thunkAPI.rejectWithValue((error as AxiosError<ErrorResponse>).response!.data.message);
     }
   }
 );
@@ -42,7 +43,7 @@ export const deleteAuthor = createAsyncThunk<Author, string, AsyncThunkConfig>(
       } = await authorsService.deleteAuthor(id);
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue((error as ErrorResponse).message);
+      return thunkAPI.rejectWithValue((error as AxiosError<ErrorResponse>).response!.data.message);
     }
   }
 );

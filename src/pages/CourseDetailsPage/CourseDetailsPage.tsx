@@ -3,7 +3,6 @@ import { FC, useEffect, useState } from 'react';
 import Button from '../../components/Button';
 import { convertTime } from '../../helpers/convertTime';
 
-import { AxiosError } from 'axios';
 import { useParams } from 'react-router-dom';
 import errorNotification from '../../helpers/errorNotification';
 import formatCreatedAt from '../../helpers/formatCreatedAt';
@@ -11,7 +10,6 @@ import { fetchAllAuthors } from '../../redux/authors/operations';
 import { selectAuthorsList } from '../../redux/authors/selectors';
 import { Course } from '../../redux/courses/courses.types';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { ErrorResponse } from '../../redux/user/user.types';
 import coursesService from '../../services/coursesService';
 import styles from './CourseDetailsPage.module.css';
 
@@ -45,7 +43,7 @@ const CourseDetailsPage: FC = () => {
         dispatch(fetchAllAuthors());
         setCourse(data);
       } catch (error) {
-        errorNotification(error as AxiosError<ErrorResponse>);
+        errorNotification(error as string);
       }
     };
     fetch();

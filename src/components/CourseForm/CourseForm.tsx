@@ -1,49 +1,61 @@
-import { ChangeEvent, FC, useState } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup/src/yup.js';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { yupResolver } from '@hookform/resolvers/yup/src/yup.js';
-import { AxiosError } from 'axios';
-import { FormProvider, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { convertTime } from '../../helpers/convertTime';
 import errorNotification from '../../helpers/errorNotification';
+
 import { addAuthors } from '../../redux/authors/operations';
 import { selectAuthorsList } from '../../redux/authors/selectors';
-import { addCourse } from '../../redux/courses/operations';
+import { addCourse, updateCourse } from '../../redux/courses/operations';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { ErrorResponse } from '../../redux/user/user.types';
+
 import AuthorsList from '../AuthorsList';
 import { OnAddAuthor, OnRemoveAuthor } from '../AuthorsList/AuthorsList.types';
 import Button from '../Button';
 import FormField from '../FormField';
-import styles from './CourseForm.module.css';
-import { Inputs } from './CourseForm.types';
 
-interface CourseFormProps {
-  isEditing?: boolean;
-}
+import styles from './CourseForm.module.css';
+
+import coursesService from '../../services/coursesService';
+import { Inputs } from './CourseForm.types';
 
 const schema = yup.object({
   title: yup.string().min(2).required(),
   description: yup.string().min(2).required(),
   duration: yup.number().positive().required('Duration is required'),
-  omit: yup.string(),
+  _: yup.string(),
 });
 
-const CourseForm: FC<CourseFormProps> = ({ isEditing = false }) => {
+const CourseForm: FC = () => {
   const navigate = useNavigate();
-
-  const [authorsToAdd, setAuthorsToAdd] = useState<string[]>([]);
-  const [authorInputValue, setAuthorInputValue] = useState<string>('');
-  const [durationValue, setDurationValue] = useState<number | null>(null);
+  const { id } = useParams();
 
   const authorsList = useAppSelector(selectAuthorsList);
 
+  const dispatch = useAppDispatch();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [authorsToAdd, setAuthorsToAdd] = useState<(string | undefined)[]>([]);
+  const [authorInputValue, setAuthorInputValue] = useState('');
+  const [durationValue, setDurationValue] = useState<number | null>(null);
+
+  const [restFormData, setRestFormData] = useState<Omit<Inputs, 'duration'>>({
+    title: '',
+    description: '',
+  });
+
   const filteredAuthorsList = authorsList.filter(item => !authorsToAdd.includes(item.name));
 
-  const methods = useForm<Inputs>({ resolver: yupResolver(schema) });
+  const methods = useForm<Inputs>({
+    resolver: yupResolver(schema),
+  });
 
-  const dispatch = useAppDispatch();
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setRestFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   const handleAddAuthor: OnAddAuthor = (newAuthor: string) =>
     setAuthorsToAdd(prev => [...prev, newAuthor]);
@@ -51,33 +63,57 @@ const CourseForm: FC<CourseFormProps> = ({ isEditing = false }) => {
   const handleRemoveAuthor: OnRemoveAuthor = (filter: string) =>
     setAuthorsToAdd(prev => prev.filter(item => item !== filter));
 
-  const handleAuthorInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleAuthorInputChange = (e: ChangeEvent<HTMLInputElement>) =>
     setAuthorInputValue(e.target.value);
-  };
 
   const handleCreateAuthorClick = () => {
     if (!authorsToAdd.includes(authorInputValue)) handleAddAuthor(authorInputValue);
     setAuthorInputValue('');
   };
 
-  const handleDurationChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleDurationChange = (e: ChangeEvent<HTMLInputElement>) =>
     setDurationValue(Number(e.target.value));
-  };
 
   const onSubmit = async (data: Inputs) => {
     // eslint-disable-next-line
-    const { omit, ...rest } = data;
+    const { _, ...rest } = data;
 
     try {
-      const response = await dispatch(addAuthors(authorsToAdd)).unwrap();
+      const response = await dispatch(addAuthors(authorsToAdd as string[])).unwrap();
 
-      await dispatch(addCourse({ ...rest, authors: response.map(item => item._id) })).unwrap();
+      if (!id)
+        await dispatch(addCourse({ ...rest, authors: response.map(item => item._id) })).unwrap();
+
+      if (id)
+        await dispatch(
+          updateCourse({ ...rest, _id: id, authors: response.map(item => item._id) })
+        ).unwrap();
 
       navigate('/courses');
     } catch (error) {
-      errorNotification(error as AxiosError<ErrorResponse>);
+      errorNotification(error as string);
     }
   };
+
+  useEffect(() => {
+    if (!id) return;
+    const fetch = async () => {
+      setIsLoading(true);
+      const {
+        data: {
+          data: { authors, duration, ...restData },
+        },
+      } = await coursesService.fetchCourse(id);
+      setAuthorsToAdd(authors?.map(id => authorsList.find(author => id === author._id)?.name));
+      setDurationValue(duration);
+      setRestFormData(restData);
+
+      setIsLoading(false);
+    };
+    fetch();
+  }, [authorsList, id]);
+
+  if (isLoading) return <p>Loading...</p>;
 
   return (
     <FormProvider {...methods}>
@@ -85,10 +121,22 @@ const CourseForm: FC<CourseFormProps> = ({ isEditing = false }) => {
         <div className={styles.wrapper}>
           <h3 className={styles.formTitle}>Main info</h3>
           <div className={`${styles.field} ${styles.mainField}`}>
-            <FormField title="title" name="title" type="text" />
+            <FormField
+              title="title"
+              name="title"
+              type="text"
+              value={restFormData.title}
+              onChange={handleInputChange}
+            />
           </div>
           <div className={`${styles.field} ${styles.mainField}`}>
-            <FormField title="description" name="description" type="textarea" />
+            <FormField
+              title="description"
+              name="description"
+              type="textarea"
+              value={restFormData.description}
+              onChange={handleInputChange}
+            />
           </div>
           <h3 className={styles.formTitle}>Duration</h3>
           <div className={styles.field}>
@@ -97,6 +145,7 @@ const CourseForm: FC<CourseFormProps> = ({ isEditing = false }) => {
               name="duration"
               type="number"
               onChange={handleDurationChange}
+              value={durationValue ? durationValue.toString() : ''}
             />
             <span>
               <span className="bolded-text">{convertTime(Number(durationValue))}</span> hours
@@ -107,7 +156,7 @@ const CourseForm: FC<CourseFormProps> = ({ isEditing = false }) => {
           <div className={`${styles.field} ${styles.authorField}`}>
             <FormField
               title="author name"
-              name="omit"
+              name="_"
               type="text"
               value={authorInputValue}
               onChange={handleAuthorInputChange}
@@ -129,7 +178,7 @@ const CourseForm: FC<CourseFormProps> = ({ isEditing = false }) => {
         </div>
         <div className={styles.buttonWrapper}>
           <Button redirectTo="/courses">Cancel</Button>
-          {!isEditing ? (
+          {!id ? (
             <Button type="submit">Create course</Button>
           ) : (
             <Button type="submit">Update course</Button>

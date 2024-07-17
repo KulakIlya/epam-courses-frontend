@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { AxiosError } from 'axios';
 import { setAuthToken } from '../../services/axios.config';
 import userService from '../../services/userService';
 import {
@@ -19,7 +20,7 @@ export const login = createAsyncThunk<LoginSuccess, UserToLogin, AsyncThunkConfi
 
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue((error as ErrorResponse).message);
+      return thunkAPI.rejectWithValue((error as AxiosError<ErrorResponse>).response!.data.message);
     }
   }
 );
@@ -32,7 +33,7 @@ export const logout = createAsyncThunk<LogoutSuccess, undefined, AsyncThunkConfi
 
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue((error as ErrorResponse).message);
+      return thunkAPI.rejectWithValue((error as AxiosError<ErrorResponse>).response!.data.message);
     }
   }
 );
@@ -49,7 +50,7 @@ export const fetchUser = createAsyncThunk<FetchUserResponse, undefined, AsyncThu
       } = await userService.fetchUser();
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue((error as ErrorResponse).message);
+      return thunkAPI.rejectWithValue((error as AxiosError<ErrorResponse>).response!.data.message);
     }
   }
 );

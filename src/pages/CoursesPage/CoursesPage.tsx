@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import { FC, useEffect, useState } from 'react';
 
 import Button from '../../components/Button';
@@ -13,7 +12,6 @@ import { selectCourseList } from '../../redux/courses/selectors';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { fetchUser } from '../../redux/user/operations';
 import { selectIsLoggedIn } from '../../redux/user/selectors';
-import { ErrorResponse } from '../../redux/user/user.types';
 
 import styles from './CoursesPage.module.css';
 
@@ -37,7 +35,7 @@ const CoursesPage: FC = () => {
 
         await dispatch(fetchAllAuthors());
       } catch (error) {
-        errorNotification(error as AxiosError<ErrorResponse>);
+        errorNotification(error as string);
       }
     };
     fetch();

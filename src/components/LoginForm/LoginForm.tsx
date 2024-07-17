@@ -7,12 +7,12 @@ import { emailValidation } from '../../constants';
 import FormField from '../FormField';
 import { Inputs } from './LoginForm.types';
 
-import { AxiosError } from 'axios';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import errorNotification from '../../helpers/errorNotification';
 import { useAppDispatch } from '../../redux/hooks';
 import { login } from '../../redux/user/operations';
-import { ErrorResponse, UserToLogin } from '../../redux/user/user.types';
+import { UserToLogin } from '../../redux/user/user.types';
 import Button from '../Button';
 import styles from './LoginForm.module.css';
 
@@ -35,24 +35,29 @@ const LoginForm: FC = () => {
 
   const methods = useForm<Inputs>({ resolver: yupResolver(schema) });
 
-  const onSubmit = (data: UserToLogin) =>
-    dispatch(login(data))
-      .unwrap()
-      .then(() => navigate('/courses'))
-      .catch(error => errorNotification(error as AxiosError<ErrorResponse>));
+  const onSubmit = async (data: UserToLogin) => {
+    try {
+      await dispatch(login(data)).unwrap();
+
+      navigate('/courses');
+    } catch (error) {
+      errorNotification(error as string);
+    }
+  };
 
   return (
     <FormProvider {...methods}>
       <div className={styles.wrapper}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className={styles.form}>
-          <FormField title="email" type="email" />
-          <FormField title="password" type="password" />
+          <FormField title="email" name="email" type="email" />
+          <FormField title="password" name="password" type="password" />
           <Button type="submit">Login</Button>
         </form>
         <p className={styles.text}>
           If you don't have an account you may <NavLink to="/registration">Registration</NavLink>
         </p>
       </div>
+      <ToastContainer position="top-right" />
     </FormProvider>
   );
 };

@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { AxiosError } from 'axios';
 import courseService from '../../services/coursesService';
 import { AsyncThunkConfig, ErrorResponse } from '../user/user.types';
 import { Course, CourseToAdd, CourseToUpdate } from './courses.types';
@@ -13,7 +14,7 @@ export const fetchAllCourses = createAsyncThunk<Course[], undefined, AsyncThunkC
       } = await courseService.fetchAll();
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue((error as ErrorResponse).message);
+      return thunkAPI.rejectWithValue((error as AxiosError<ErrorResponse>).response!.data.message);
     }
   }
 );
@@ -27,7 +28,7 @@ export const addCourse = createAsyncThunk<Course, CourseToAdd, AsyncThunkConfig>
       } = await courseService.addCourse(courseToAdd);
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue((error as ErrorResponse).message);
+      return thunkAPI.rejectWithValue((error as AxiosError<ErrorResponse>).response!.data.message);
     }
   }
 );
@@ -41,7 +42,7 @@ export const updateCourse = createAsyncThunk<Course, CourseToUpdate, AsyncThunkC
       } = await courseService.updateCourse(courseToUpdate);
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue((error as ErrorResponse).message);
+      return thunkAPI.rejectWithValue((error as AxiosError<ErrorResponse>).response!.data.message);
     }
   }
 );
@@ -55,7 +56,7 @@ export const deleteCourse = createAsyncThunk<string, string, AsyncThunkConfig>(
       } = await courseService.deleteCourse(id);
       return (data as Course)._id;
     } catch (error) {
-      return thunkAPI.rejectWithValue((error as ErrorResponse).message);
+      return thunkAPI.rejectWithValue((error as AxiosError<ErrorResponse>).response!.data.message);
     }
   }
 );

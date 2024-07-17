@@ -16,6 +16,6 @@ export interface InitialState {
 export type CourseToAdd = Omit<Course, 'createdAt' | 'owner' | '_id'>;
 
 // Update course
-export interface CourseToUpdate extends Partial<Omit<Course, 'id'>> {
-  id: string;
+export interface CourseToUpdate extends Omit<Course, 'createdAt' | 'owner' | '_id'> {
+  _id: string;
 }

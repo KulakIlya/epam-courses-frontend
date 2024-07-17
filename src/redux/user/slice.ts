@@ -26,6 +26,9 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.token = payload.token;
       })
+      .addCase(login.rejected, state => {
+        state.isLoading = false;
+      })
       .addCase(logout.fulfilled, state => {
         state.username = '';
         state.email = '';

@@ -12,7 +12,9 @@ interface CoursesListProps {
 const CoursesList: FC<CoursesListProps> = ({ list, filter }) => {
   const filteredList = useMemo(() => {
     return list.filter(
-      item => item._id.toLowerCase().includes(filter) || item.title.toLowerCase().includes(filter)
+      item =>
+        item._id.toLowerCase().includes(filter.toLowerCase()) ||
+        item.title.toLowerCase().includes(filter.toLowerCase())
     );
   }, [filter, list]);
 

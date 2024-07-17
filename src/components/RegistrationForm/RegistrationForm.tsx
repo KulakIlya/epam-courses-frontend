@@ -1,5 +1,4 @@
 import { yupResolver } from '@hookform/resolvers/yup/src/yup.js';
-import { AxiosError } from 'axios';
 import { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -8,7 +7,6 @@ import * as yup from 'yup';
 import { emailValidation } from '../../constants';
 import FormField from '../FormField';
 
-import { ErrorResponse } from '../../redux/user/user.types';
 import Button from '../Button';
 import styles from './RegistrationForm.module.css';
 
@@ -40,7 +38,7 @@ const RegistrationForm: FC = () => {
       await userService.registerUser(data);
       navigate('/login');
     } catch (error) {
-      errorNotification(error as AxiosError<ErrorResponse>);
+      errorNotification(error as string);
     }
   };
 
@@ -48,9 +46,9 @@ const RegistrationForm: FC = () => {
     <FormProvider {...methods}>
       <div className={styles.wrapper}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className={styles.form}>
-          <FormField type="text" title="name" />
-          <FormField type="email" title="email" />
-          <FormField type="password" title="password" />
+          <FormField type="text" title="name" name="name" />
+          <FormField type="email" title="email" name="email" />
+          <FormField type="password" title="password" name="password" />
           <Button type="submit">Registration</Button>
         </form>
         <p className={styles.text}>

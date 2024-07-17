@@ -30,7 +30,7 @@ const AppBar: FC = () => {
   return (
     <header className={styles.header}>
       <div className="container">
-        <Link to="/">
+        <Link to="/courses">
           <Logo />
         </Link>
         <div className={styles.wrapper}>

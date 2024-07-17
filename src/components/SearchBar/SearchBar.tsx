@@ -11,6 +11,10 @@ interface SearchBarProps {
   onSubmit: HandleFilter;
 }
 
+// interface Inputs extends HTMLFormControlsCollection {
+//   filter: HTMLInputElement;
+// }
+
 interface Inputs {
   filter: string;
 }
@@ -18,7 +22,15 @@ interface Inputs {
 const SearchBar: FC<SearchBarProps> = ({ onSubmit }) => {
   const methods = useForm<Inputs>();
 
-  const handleSubmit = (data: { filter: string }) => onSubmit(data.filter);
+  const handleSubmit = (data: { filter: string }) => {
+    onSubmit(data.filter);
+  };
+
+  // const handleSubmit = (e: SyntheticEvent) => {
+  //   e.preventDefault();
+  //   const target = e.target as HTMLFormElement;
+  //   onSubmit((target.elements as Inputs).filter.value);
+  // };
 
   return (
     <FormProvider {...methods}>
