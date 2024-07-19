@@ -1,10 +1,11 @@
 import { FC, lazy, Suspense, useEffect } from 'react';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
-import { useAppDispatch } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { fetchUser } from '../../redux/user/operations';
 
 import Loader from '../../common/Loader';
+import { selectIsLoading } from '../../redux/user/selectors';
 import PrivateRoute from '../PrivateRoute';
 import RestrictedRoute from '../RestrictedRoute';
 import SharedLayout from '../SharedLayout';
@@ -20,6 +21,8 @@ const App: FC = () => {
 
   const dispatch = useAppDispatch();
 
+  const isLoading = useAppSelector(selectIsLoading);
+
   useEffect(() => {
     const fetch = async () => {
       try {
@@ -33,34 +36,41 @@ const App: FC = () => {
 
   return (
     <SharedLayout>
-      <Suspense fallback={<Loader />}>
-        <Routes>
-          <Route
-            path="/registration"
-            element={<RestrictedRoute element={<RegistrationPage />} redirectTo="/courses" />}
-          />
-          <Route
-            path="/login"
-            element={<RestrictedRoute element={<LoginPage />} redirectTo="/courses" />}
-          />
-          <Route path="/courses">
-            <Route index element={<PrivateRoute element={<CoursesPage />} redirectTo="/login" />} />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Suspense fallback={<Loader />}>
+          <Routes>
             <Route
-              path=":id"
-              element={<PrivateRoute element={<CourseDetailsPage />} redirectTo="/login" />}
+              path="/registration"
+              element={<RestrictedRoute element={<RegistrationPage />} redirectTo="/courses" />}
             />
             <Route
-              path="add"
-              element={<PrivateRoute element={<CreateCoursePage />} redirectTo="/login" />}
+              path="/login"
+              element={<RestrictedRoute element={<LoginPage />} redirectTo="/courses" />}
             />
-            <Route
-              path="edit/:id"
-              element={<PrivateRoute element={<CreateCoursePage />} redirectTo="/login" />}
-            />
-          </Route>
-          <Route path="*" element={<Navigate to="/courses" />} />
-        </Routes>
-      </Suspense>
+            <Route path="/courses">
+              <Route
+                index
+                element={<PrivateRoute element={<CoursesPage />} redirectTo="/login" />}
+              />
+              <Route
+                path=":id"
+                element={<PrivateRoute element={<CourseDetailsPage />} redirectTo="/login" />}
+              />
+              <Route
+                path="add"
+                element={<PrivateRoute element={<CreateCoursePage />} redirectTo="/login" />}
+              />
+              <Route
+                path="edit/:id"
+                element={<PrivateRoute element={<CreateCoursePage />} redirectTo="/login" />}
+              />
+            </Route>
+            <Route path="*" element={<Navigate to="/courses" />} />
+          </Routes>
+        </Suspense>
+      )}
     </SharedLayout>
   );
 };
