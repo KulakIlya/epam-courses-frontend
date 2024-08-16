@@ -9,7 +9,6 @@ import Button from '../Button';
 
 import errorNotification from '../../helpers/errorNotification';
 import formatCreatedAt from '../../helpers/formatCreatedAt';
-import { Author } from '../../redux/authors/authors.types';
 import { selectAuthorsList } from '../../redux/authors/selectors';
 import { deleteCourse } from '../../redux/courses/operations';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -47,9 +46,7 @@ const CourseCard: FC<CourseCardProps> = ({
             <p>
               Authors:{' '}
               <span className="regular-text">
-                {authors
-                  .map(id => (allAuthors as Author[]).find(author => id === author._id)?.name)
-                  .join(', ')}
+                {authors.map(id => allAuthors?.find(author => id === author._id)?.name).join(', ')}
               </span>
             </p>
             <p>
