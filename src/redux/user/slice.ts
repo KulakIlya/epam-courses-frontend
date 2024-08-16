@@ -48,6 +48,7 @@ const userSlice = createSlice({
       .addCase(fetchUser.rejected, state => {
         state.isLoading = false;
         state.token = '';
+        state.isLoggedIn = false;
       }),
 });
 

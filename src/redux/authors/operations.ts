@@ -12,6 +12,7 @@ export const fetchAllAuthors = createAsyncThunk<Author[], undefined, AsyncThunkC
       const {
         data: { data },
       } = await authorsService.fetchAllAuthors();
+
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue((error as AxiosError<ErrorResponse>).response!.data.message);

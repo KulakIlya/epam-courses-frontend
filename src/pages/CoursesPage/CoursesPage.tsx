@@ -6,19 +6,21 @@ import SearchBar from '../../components/SearchBar';
 
 import errorNotification from '../../helpers/errorNotification';
 
-import { fetchAllAuthors } from '../../redux/authors/operations';
 import { fetchAllCourses } from '../../redux/courses/operations';
 import { selectCourseList } from '../../redux/courses/selectors';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { fetchUser } from '../../redux/user/operations';
 import { selectIsLoggedIn } from '../../redux/user/selectors';
 
 import styles from './CoursesPage.module.css';
 
+import { useNavigate } from 'react-router';
+import { fetchAllAuthors } from '../../redux/authors/operations';
 import { selectAuthorsList } from '../../redux/authors/selectors';
+import { fetchUser } from '../../redux/user/operations';
 import { HandleFilter } from './CoursesPage.type';
 
 const CoursesPage: FC = () => {
+  const navigate = useNavigate();
   const [filter, setFilter] = useState<string>('');
 
   const coursesList = useAppSelector(selectCourseList);
@@ -32,17 +34,22 @@ const CoursesPage: FC = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        if (!isLoggedIn) await dispatch(fetchUser()).unwrap();
+        if (isLoggedIn) return;
 
-        if (!coursesList) await dispatch(fetchAllCourses()).unwrap();
+        await dispatch(fetchUser())
+          .unwrap()
+          .catch(() => navigate('/login'));
 
-        if (!authors.length) await dispatch(fetchAllAuthors()).unwrap();
+        await dispatch(fetchAllCourses());
+
+        await dispatch(fetchAllAuthors());
       } catch (error) {
         errorNotification(error as string);
       }
     };
+
     fetch();
-  }, [dispatch, isLoggedIn, authors, coursesList]);
+  }, [dispatch, isLoggedIn, authors, coursesList, navigate]);
 
   return (
     <>

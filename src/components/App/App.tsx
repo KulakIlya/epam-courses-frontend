@@ -1,7 +1,7 @@
 import { FC, lazy, Suspense } from 'react';
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { useAppSelector } from '../../redux/hooks';
 
 import Loader from '../../common/Loader';
 import { selectIsLoading } from '../../redux/user/selectors';
@@ -16,23 +16,7 @@ const CourseDetailsPage = lazy(() => import('../../pages/CourseDetailsPage'));
 const CreateCoursePage = lazy(() => import('../../pages/CreateCoursePage'));
 
 const App: FC = () => {
-  const navigate = useNavigate();
-
-  const dispatch = useAppDispatch();
-
   const isLoading = useAppSelector(selectIsLoading);
-
-  // useEffect(() => {
-  //   const fetch = async () => {
-  //     try {
-  //       console.log(123);
-  //       await dispatch(fetchUser()).unwrap();
-  //     } catch (error) {
-  //       navigate('/login');
-  //     }
-  //   };
-  //   fetch();
-  // }, [dispatch]);
 
   return (
     <SharedLayout>
