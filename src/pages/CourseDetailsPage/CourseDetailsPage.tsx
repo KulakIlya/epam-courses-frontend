@@ -6,6 +6,7 @@ import { convertTime } from '../../helpers/convertTime';
 import { useParams } from 'react-router-dom';
 import errorNotification from '../../helpers/errorNotification';
 import formatCreatedAt from '../../helpers/formatCreatedAt';
+import { Author } from '../../redux/authors/authors.types';
 import { fetchAllAuthors } from '../../redux/authors/operations';
 import { selectAuthorsList } from '../../redux/authors/selectors';
 import { Course } from '../../redux/courses/courses.types';
@@ -76,7 +77,9 @@ const CourseDetailsPage: FC = () => {
           <p>
             <span className={styles.cardTitle}>Authors:</span>{' '}
             <span className={`regular-text ${styles.cardValue}`}>
-              {authors?.map(id => allAuthors.find(author => id === author._id)?.name).join(', ')}
+              {authors
+                ?.map(id => (allAuthors as Author[]).find(author => id === author._id)?.name)
+                .join(', ')}
             </span>
           </p>
         </div>

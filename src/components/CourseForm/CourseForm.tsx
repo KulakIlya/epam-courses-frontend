@@ -20,6 +20,7 @@ import FormField from '../FormField';
 import styles from './CourseForm.module.css';
 
 import Loader from '../../common/Loader';
+import { Author } from '../../redux/authors/authors.types';
 import coursesService from '../../services/coursesService';
 import { Inputs } from './CourseForm.types';
 
@@ -43,7 +44,9 @@ const CourseForm: FC = () => {
   const [authorInputValue, setAuthorInputValue] = useState('');
   const [durationValue, setDurationValue] = useState<number | null>(null);
 
-  const filteredAuthorsList = authorsList.filter(item => !authorsToAdd.includes(item.name));
+  const filteredAuthorsList = (authorsList as Author[]).filter(
+    item => !authorsToAdd.includes(item.name)
+  );
 
   const methods = useForm<Inputs>({
     resolver: yupResolver(schema),
@@ -88,7 +91,7 @@ const CourseForm: FC = () => {
   };
 
   useEffect(() => {
-    if (!id || !authorsList.length) return;
+    if (!id || !authorsList) return;
 
     setIsLoading(true);
 

@@ -13,7 +13,7 @@ const CreateCoursePage: FC<CreateCoursePageProps> = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      if (!authors.length) await dispatch(fetchAllAuthors()).unwrap();
+      if (!authors) await dispatch(fetchAllAuthors()).unwrap();
     };
     fetch();
   }, [dispatch, authors]);
