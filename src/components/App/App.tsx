@@ -1,8 +1,7 @@
-import { FC, lazy, Suspense, useEffect } from 'react';
+import { FC, lazy, Suspense } from 'react';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { fetchUser } from '../../redux/user/operations';
 
 import Loader from '../../common/Loader';
 import { selectIsLoading } from '../../redux/user/selectors';
@@ -23,16 +22,17 @@ const App: FC = () => {
 
   const isLoading = useAppSelector(selectIsLoading);
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        await dispatch(fetchUser()).unwrap();
-      } catch (error) {
-        navigate('/login');
-      }
-    };
-    fetch();
-  }, [dispatch, navigate]);
+  // useEffect(() => {
+  //   const fetch = async () => {
+  //     try {
+  //       console.log(123);
+  //       await dispatch(fetchUser()).unwrap();
+  //     } catch (error) {
+  //       navigate('/login');
+  //     }
+  //   };
+  //   fetch();
+  // }, [dispatch]);
 
   return (
     <SharedLayout>

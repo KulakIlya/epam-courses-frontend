@@ -33,7 +33,8 @@ const CoursesPage: FC = () => {
     const fetch = async () => {
       try {
         if (!isLoggedIn) await dispatch(fetchUser()).unwrap();
-        if (!coursesList.length) await dispatch(fetchAllCourses()).unwrap();
+
+        if (!coursesList) await dispatch(fetchAllCourses()).unwrap();
 
         if (!authors.length) await dispatch(fetchAllAuthors()).unwrap();
       } catch (error) {
@@ -49,7 +50,7 @@ const CoursesPage: FC = () => {
         <SearchBar onSubmit={handleFilter} />
         <Button redirectTo="add">Add course</Button>
       </div>
-      <CoursesList list={coursesList} filter={filter} />
+      <CoursesList list={coursesList || []} filter={filter} />
     </>
   );
 };

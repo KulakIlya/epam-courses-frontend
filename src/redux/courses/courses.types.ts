@@ -9,7 +9,7 @@ export interface Course {
 }
 
 export interface InitialState {
-  list: Course[];
+  list: Course[] | null;
 }
 
 // Add course

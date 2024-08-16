@@ -4,5 +4,5 @@ export interface Author {
 }
 
 export interface InitialState {
-  list: Author[];
+  list: Author[] | null;
 }

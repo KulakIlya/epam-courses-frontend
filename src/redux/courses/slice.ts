@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { InitialState } from './courses.types';
+import { Course, InitialState } from './courses.types';
 import { addCourse, deleteCourse, fetchAllCourses, updateCourse } from './operations';
 
 const initialState: InitialState = {
-  list: [],
+  list: null,
 };
 
 const coursesSlice = createSlice({
@@ -12,7 +12,7 @@ const coursesSlice = createSlice({
   initialState,
   reducers: {
     resetCourses: state => {
-      state.list = [];
+      state.list = null;
     },
   },
   extraReducers: builder =>
@@ -21,14 +21,14 @@ const coursesSlice = createSlice({
         state.list = payload;
       })
       .addCase(addCourse.fulfilled, (state, { payload }) => {
-        state.list.push(payload);
+        (state.list as Course[]).push(payload);
       })
       .addCase(updateCourse.fulfilled, (state, { payload }) => {
-        const indexToUpdate = state.list.findIndex(item => item._id === payload._id);
-        state.list[indexToUpdate] = payload;
+        const indexToUpdate = (state.list as Course[]).findIndex(item => item._id === payload._id);
+        (state.list as Course[])[indexToUpdate] = payload;
       })
       .addCase(deleteCourse.fulfilled, (state, { payload }) => {
-        state.list = state.list.filter(item => item._id !== payload);
+        state.list = (state.list as Course[]).filter(item => item._id !== payload);
       }),
 });
 
